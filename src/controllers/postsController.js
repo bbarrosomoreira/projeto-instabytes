@@ -26,7 +26,7 @@ export async function postarNovoPost(req, res) {
 
 export async function uploadImagem(req, res) {
   const novoPost = {
-    descrição: "",
+    descricao: "",
     imgUrl: req.file.originalname,
     alt: "",
   };
@@ -48,11 +48,11 @@ export async function atualizarNovoPost(req, res) {
 
   try {
     const imgBuffer = fs.readFileSync(`uploads/${id}.png`);
-    const descricao = await gerarDescricaoComGemini(imgBuffer);
+    const { descricao, altText } = await gerarDescricaoComGemini(imgBuffer);
     const post = {
       imgUrl: urlImagem,
       descricao: descricao,
-      alt: req.body.alt,
+      alt: altText,
     };
     const postCriado = await atualizarPost(id, post);
     res.status(200).json(postCriado);
